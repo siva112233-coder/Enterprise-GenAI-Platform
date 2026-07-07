@@ -49,12 +49,6 @@ def upgrade() -> None:
     op.create_index(op.f("ix_team_organization_id"), "team", ["organization_id"], unique=False)
 
     # 3. Create User table
-    # Create enum types first in case of PostgreSQL
-    role_enum = sa.Enum("ADMIN", "DEVELOPER", "VIEWER", name="user_role")
-    role_enum.create(op.get_bind(), checkfirst=True)
-    status_enum = sa.Enum("ACTIVE", "INACTIVE", "SUSPENDED", name="user_status")
-    status_enum.create(op.get_bind(), checkfirst=True)
-
     op.create_table(
         "user",
         sa.Column("id", sa.UUID(), nullable=False),

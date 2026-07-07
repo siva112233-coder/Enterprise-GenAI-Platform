@@ -42,7 +42,7 @@ if config.config_file_name is not None:
 # Inject the database URL from application settings.
 # This overrides the sqlalchemy.url value in alembic.ini so we have a single
 # source of truth for database connection strings.
-config.set_main_option("sqlalchemy.url", str(settings.SYNC_DATABASE_URL))
+config.set_main_option("sqlalchemy.url", str(settings.DATABASE_URL))
 
 # Provide Base.metadata so autogenerate can diff against the live schema
 target_metadata = Base.metadata
