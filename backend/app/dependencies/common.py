@@ -30,13 +30,14 @@ Usage in route handlers::
         ...
 """
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Depends
 from typing import Annotated
 
-from app.core.config import Settings, get_settings as _get_settings
-from app.db.session import get_db as _get_db
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import Settings
+from app.core.config import get_settings as _get_settings
+from app.db.session import get_db as _get_db
 
 # ---------------------------------------------------------------------------
 # Re-exported dependencies with type aliases for cleaner route signatures

@@ -22,12 +22,13 @@ import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import NullPool, StaticPool
 
 from app.core.config import Settings, get_settings
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import create_application
+import app.models  # noqa: F401
 
 # ---------------------------------------------------------------------------
 # Test settings override
@@ -84,11 +85,11 @@ async def test_engine():
     Create a test database engine for the full test session.
 
     Uses SQLite in-memory database for speed and isolation.
-    NullPool prevents connection sharing between tests.
+    StaticPool shares a single connection to keep the in-memory DB alive.
     """
     engine = create_async_engine(
         TEST_DATABASE_URL,
-        poolclass=NullPool,
+        poolclass=StaticPool,
         echo=False,
     )
 

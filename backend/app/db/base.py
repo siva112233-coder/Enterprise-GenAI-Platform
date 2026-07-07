@@ -10,8 +10,10 @@ consistent, predictable constraint names across all databases and
 migration scripts (avoids anonymous constraint names like 'uq_1').
 """
 
+from typing import Any
+
 from sqlalchemy import MetaData
-from sqlalchemy.orm import DeclarativeBase, declared_attr
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr
 
 # ---------------------------------------------------------------------------
 # Naming conventions
@@ -49,7 +51,11 @@ class Base(DeclarativeBase):
 
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
 
+    # Type annotation for static analysis to prevent "class Base has no attribute id" warnings
+    id: Mapped[Any]
+
     @declared_attr.directive
+    # pyrefly: ignore [bad-override]
     def __tablename__(cls) -> str:
         """
         Derive table name automatically from the class name.

@@ -18,8 +18,8 @@ Shutdown sequence:
     1. close_db()               — dispose connection pool
 """
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

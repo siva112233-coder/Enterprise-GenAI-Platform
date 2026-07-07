@@ -8,7 +8,7 @@ Follows the 12-Factor App methodology for configuration management.
 from functools import lru_cache
 from typing import Annotated, Any
 
-from pydantic import AnyUrl, BeforeValidator, PostgresDsn, computed_field, model_validator
+from pydantic import BeforeValidator, PostgresDsn, computed_field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

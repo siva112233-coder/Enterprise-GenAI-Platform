@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 #   from app.models.provider import LLMProvider  # noqa: F401
 #
 from app.db.base import Base  # noqa: F401
+import app.models  # noqa: F401
 
 # ---------------------------------------------------------------------------
 # Application settings (provides the synchronous DATABASE_URL for Alembic)
