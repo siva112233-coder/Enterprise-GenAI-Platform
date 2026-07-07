@@ -1,0 +1,86 @@
+# =============================================================================
+# Pytest configuration for the Enterprise GenAI Platform test suite
+# =============================================================================
+
+[tool.pytest.ini_options]
+# Test discovery
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# asyncio mode: all async test functions use asyncio automatically
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+
+# Minimum coverage threshold (enforced with: pytest --cov)
+# addopts = "--cov=app --cov-report=term-missing --cov-fail-under=80"
+
+# Markers used in the test suite
+markers = [
+    "unit: Fast, isolated unit tests (no I/O)",
+    "integration: Tests that require a real database connection",
+    "e2e: End-to-end tests against a running server",
+]
+
+# Suppress specific deprecation warnings from third-party libraries
+filterwarnings = [
+    "ignore::DeprecationWarning:pydantic.*:",
+    "ignore::DeprecationWarning:sqlalchemy.*:",
+]
+
+# ---------------------------------------------------------------------------
+# Ruff linting and formatting configuration
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "ANN",  # flake8-annotations
+]
+ignore = [
+    "ANN101",  # Missing type annotation for self
+    "ANN102",  # Missing type annotation for cls
+    "B008",    # Do not perform function calls in default arguments (FastAPI Depends pattern)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "tests"]
+
+# ---------------------------------------------------------------------------
+# Mypy static type checking
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+exclude = ["alembic/"]
+
+# Per-module overrides for third-party libraries without stubs
+[[tool.mypy.overrides]]
+module = ["structlog.*", "asyncpg.*"]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# Coverage configuration
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/db/base.py", "tests/*", "alembic/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 80

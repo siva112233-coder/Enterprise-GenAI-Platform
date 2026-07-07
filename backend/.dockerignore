@@ -1,0 +1,52 @@
+# Docker ignore file for the Enterprise GenAI Platform backend.
+# Prevents sensitive files and build artifacts from being included
+# in the Docker build context, reducing image size and attack surface.
+
+# Version control
+.git
+.gitignore
+
+# Python cache and compiled bytecode
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist/
+build/
+
+# Virtual environments
+.venv
+venv
+env
+
+# Environment files (NEVER include in Docker image)
+.env
+.env.*
+!.env.example
+
+# Test and development files
+tests/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE configuration
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log
+logs/
+
+# Alembic auto-generated — migrations are applied at runtime, not bake-in
+# (Uncomment if you prefer to bake migrations into the image)
+# alembic/versions/

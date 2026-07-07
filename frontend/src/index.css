@@ -1,0 +1,86 @@
+/*
+ * Global stylesheet — Enterprise GenAI Platform
+ *
+ * 1. TailwindCSS v4 import (replaces @tailwind base/components/utilities)
+ * 2. CSS custom properties for design tokens
+ * 3. Base element resets
+ * 4. Scrollbar styling
+ */
+
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/* Design tokens (CSS custom properties)                                       */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Sidebar */
+  --sidebar-width: 240px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-base: 150ms ease;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Base resets                                                                  */
+/* -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: #020617; /* slate-950 */
+  color: #f1f5f9;            /* slate-100 */
+}
+
+#root {
+  height: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Custom scrollbar — webkit only                                               */
+/* -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.4); /* slate-500/40 */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.7);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Focus-visible ring                                                           */
+/* -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid #a78bfa; /* violet-400 */
+  outline-offset: 2px;
+}

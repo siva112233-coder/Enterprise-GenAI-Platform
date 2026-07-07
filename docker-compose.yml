@@ -1,0 +1,158 @@
+version: "3.9"
+
+# =============================================================================
+# Enterprise GenAI Platform — Docker Compose
+# Local multi-container development environment orchestrating all services:
+#   - postgres (Database)
+#   - backend (Core API service)
+#   - frontend (React SPA served by Nginx)
+#   - gateway (LLM Gateway service)
+#   - langgraph-service (Agentic orchestration service)
+# =============================================================================
+# Usage:
+#   Start:  docker compose up -d
+#   Stop:   docker compose down
+#   Logs:   docker compose logs -f
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL Database
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: genai_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: genai_user
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: genai_platform
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U genai_user -d genai_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # FastAPI Backend
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: genai_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: genai_user
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: genai_platform
+      LOG_LEVEL: DEBUG
+      LOG_FORMAT: text
+      SECRET_KEY: local-dev-secret-key-not-for-production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # React Frontend (Served by Nginx)
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: genai_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+  # ---------------------------------------------------------------------------
+  # AI Gateway Service
+  # ---------------------------------------------------------------------------
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: genai_gateway
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8010:8000"
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+      DATABASE_URL: postgresql+asyncpg://genai_user:changeme@postgres:5432/genai_platform
+      JWT_SECRET: local-dev-secret-key-not-for-production
+      REDIS_URL: redis://redis:6379/0
+      OPENAI_API_KEY: ""
+      CLAUDE_API_KEY: ""
+      GEMINI_API_KEY: ""
+      DEEPSEEK_API_KEY: ""
+      GROQ_API_KEY: ""
+      OLLAMA_URL: "http://localhost:11434"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # LangGraph Agent Service
+  # ---------------------------------------------------------------------------
+  langgraph-service:
+    build:
+      context: .
+      dockerfile: langgraph-service/Dockerfile
+    container_name: genai_langgraph
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8020:8000"
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "true"
+      DATABASE_URL: postgresql+asyncpg://genai_user:changeme@postgres:5432/genai_platform
+      JWT_SECRET: local-dev-secret-key-not-for-production
+      REDIS_URL: redis://redis:6379/0
+      OPENAI_API_KEY: ""
+      CLAUDE_API_KEY: ""
+      GEMINI_API_KEY: ""
+      DEEPSEEK_API_KEY: ""
+      GROQ_API_KEY: ""
+      OLLAMA_URL: "http://localhost:11434"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  postgres_data:
+    driver: local

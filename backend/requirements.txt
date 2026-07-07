@@ -1,0 +1,43 @@
+# =============================================================================
+# Enterprise GenAI Platform — Python Dependencies
+# Module 1A: Backend Foundation
+# =============================================================================
+# Pin major.minor versions for reproducibility; allow patch updates.
+# Run: pip install -r requirements.txt
+# Dev:  pip install -r requirements-dev.txt
+
+# -----------------------------------------------------------------------------
+# Web Framework
+# -----------------------------------------------------------------------------
+fastapi==0.115.6
+uvicorn[standard]==0.32.1          # ASGI server with uvloop + httptools
+python-multipart==0.0.18           # Required for form data / file upload support
+
+# -----------------------------------------------------------------------------
+# Database
+# -----------------------------------------------------------------------------
+sqlalchemy==2.0.36                 # Async ORM (2.0 API)
+asyncpg==0.31.0                    # Async PostgreSQL driver (asyncpg engine)
+psycopg2-binary==2.9.12            # Sync PostgreSQL driver (Alembic migrations only)
+alembic==1.14.0                    # Database schema migration tool
+
+# -----------------------------------------------------------------------------
+# Configuration & Validation
+# -----------------------------------------------------------------------------
+pydantic==2.13.4                   # Data validation and serialisation
+pydantic-settings==2.6.1           # Settings management with .env support
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+structlog==24.4.0                  # Structured logging with JSON and console renderers
+
+# -----------------------------------------------------------------------------
+# HTTP Client (for future LLM provider integrations)
+# -----------------------------------------------------------------------------
+httpx==0.28.1                      # Async HTTP client (replaces requests in async context)
+
+# -----------------------------------------------------------------------------
+# Utilities
+# -----------------------------------------------------------------------------
+python-dotenv==1.0.1               # .env file loading (backup for pydantic-settings)
