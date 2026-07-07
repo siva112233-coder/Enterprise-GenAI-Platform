@@ -6,7 +6,7 @@ from app.repositories.application import ApplicationRepository
 from app.repositories.base import BaseRepository
 from app.repositories.organization import OrganizationRepository
 from app.repositories.team import TeamRepository
-from app.repositories.user import UserRepository
+from app.repositories.user_repository import UserRepository
 
 __all__ = [
     "BaseRepository",

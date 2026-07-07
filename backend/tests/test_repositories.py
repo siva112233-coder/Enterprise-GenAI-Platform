@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 # Import repositories and models
 from app.repositories.organization import OrganizationRepository
 from app.repositories.team import TeamRepository
-from app.repositories.user import UserRepository
+from app.repositories.user_repository import UserRepository
 from app.repositories.application import ApplicationRepository
 
 from app.schemas.organization import OrganizationCreate, OrganizationUpdate

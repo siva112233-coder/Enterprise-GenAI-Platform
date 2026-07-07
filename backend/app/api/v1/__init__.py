@@ -13,7 +13,14 @@ Adding a new feature module:
 
 from fastapi import APIRouter
 
-from app.api.v1 import health
+from app.api.v1 import (
+    applications,
+    auth,
+    health,
+    organizations,
+    teams,
+    users,
+)
 
 # Root v1 router — all feature routers are nested under this
 api_router = APIRouter()
@@ -22,6 +29,17 @@ api_router = APIRouter()
 # Registered routers
 # ---------------------------------------------------------------------------
 api_router.include_router(health.router)
+api_router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+api_router.include_router(
+    organizations.router, prefix="/organizations", tags=["Organization Management"]
+)
+api_router.include_router(teams.router, prefix="/teams", tags=["Team Management"])
+api_router.include_router(users.router, prefix="/users", tags=["User Management"])
+api_router.include_router(
+    applications.router, prefix="/applications", tags=["Application Management"]
+)
+
+
 
 # Future routers will be added here as the platform grows, e.g.:
 # api_router.include_router(auth.router,        prefix="/auth",        tags=["Authentication"])

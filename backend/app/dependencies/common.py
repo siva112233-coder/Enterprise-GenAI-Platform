@@ -30,6 +30,7 @@ Usage in route handlers::
         ...
 """
 
+from collections.abc import AsyncGenerator
 from typing import Annotated
 
 from fastapi import Depends
@@ -43,7 +44,8 @@ from app.db.session import get_db as _get_db
 # Re-exported dependencies with type aliases for cleaner route signatures
 # ---------------------------------------------------------------------------
 
-async def get_db() -> AsyncSession:  # type: ignore[return]
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Yield a per-request transactional database session.
 

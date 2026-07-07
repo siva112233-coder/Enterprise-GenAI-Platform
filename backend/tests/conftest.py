@@ -147,16 +147,24 @@ def test_app(test_session_factory):
     """
     application = create_application()
 
-    # Override database dependency
     async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
         async with test_session_factory() as session:
-            yield session
+            try:
+                yield session
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
+
+    from app.dependencies.common import get_db as common_get_db
 
     # Override settings dependency
     application.dependency_overrides[get_settings] = get_test_settings
     application.dependency_overrides[get_db] = override_get_db
+    application.dependency_overrides[common_get_db] = override_get_db
 
     return application
+
 
 
 @pytest_asyncio.fixture

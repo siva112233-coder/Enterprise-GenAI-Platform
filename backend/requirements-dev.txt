@@ -23,6 +23,8 @@ greenlet==3.5.3                    # Required by SQLAlchemy async on Python 3.13
 ruff==0.8.4                        # Linting and formatting (replaces flake8/isort/black)
 mypy==1.13.0                       # Static type checking
 sqlalchemy[mypy]==2.0.36           # SQLAlchemy type stubs for mypy
+types-passlib==1.7.7.20260211      # Type stubs for passlib
+
 
 # -----------------------------------------------------------------------------
 # Development Utilities

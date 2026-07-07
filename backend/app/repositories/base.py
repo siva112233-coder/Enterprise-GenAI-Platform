@@ -81,6 +81,7 @@ class BaseRepository(Generic[ModelT, CreateSchemaT, UpdateSchemaT]):
         db_obj = self.model(**filtered_data)
         self.db.add(db_obj)
         await self.db.flush()
+        await self.db.refresh(db_obj)
         return db_obj
 
     async def update(self, db_obj: ModelT, obj_in: UpdateSchemaT | dict[str, Any]) -> ModelT:
@@ -106,6 +107,7 @@ class BaseRepository(Generic[ModelT, CreateSchemaT, UpdateSchemaT]):
 
         self.db.add(db_obj)
         await self.db.flush()
+        await self.db.refresh(db_obj)
         return db_obj
 
     async def delete(self, id: uuid.UUID) -> ModelT | None:
