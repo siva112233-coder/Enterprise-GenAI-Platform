@@ -1,7 +1,30 @@
+# =============================================================================
+# Enterprise GenAI Platform — AI Gateway Dependencies
+# Module 3A
+# =============================================================================
+
+# ── Web framework ─────────────────────────────────────────────────────────────
 fastapi==0.115.6
 uvicorn[standard]==0.32.1
+
+# ── Data validation & settings ────────────────────────────────────────────────
 pydantic==2.10.3
 pydantic-settings==2.6.1
+
+# ── Structured logging ────────────────────────────────────────────────────────
 structlog==24.4.0
+
+# ── HTTP client (for provider integrations) ───────────────────────────────────
 httpx==0.28.1
+
+# ── Environment ───────────────────────────────────────────────────────────────
 python-dotenv==1.0.1
+
+# ── Async utilities ───────────────────────────────────────────────────────────
+anyio==4.7.0
+
+# ── Provider SDK stubs (install as needed when implementing providers) ────────
+# openai>=1.58.1               # OpenAI + DeepSeek + Groq (OpenAI-compatible)
+# anthropic>=0.40.0            # Claude
+# google-generativeai>=0.8.3   # Gemini
+# tiktoken>=0.8.0              # Token counting for OpenAI/DeepSeek models
